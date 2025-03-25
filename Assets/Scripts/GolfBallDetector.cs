@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GolfBallDetector : MonoBehaviour
 {
-    public GameObject golfBall;  // ลูกกอล์ฟที่เราจะตรวจจับ
+    public GameObject golfBall, winningScreen;  // ลูกกอล์ฟที่เราจะตรวจจับ
     public CameraFollower cameraFollower;  // ตัวแปรสำหรับเชื่อมโยงกับ CameraFollower script
 
     void OnTriggerEnter(Collider other)
@@ -11,6 +11,7 @@ public class GolfBallDetector : MonoBehaviour
         {
             Destroy(other.gameObject);
             cameraFollower.OnBallInHole();  // แจ้งกล้องว่า "ลูกกอล์ฟลงหลุม"
+            winningScreen.SetActive(true);
         }
     }
 }
