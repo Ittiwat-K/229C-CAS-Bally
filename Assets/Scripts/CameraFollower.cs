@@ -23,7 +23,7 @@ public class CameraFollower : MonoBehaviour
     {
         if (target != null && !isBallInHole)
         {
-                if (golfBallRb != null && golfBallRb.linearVelocity.magnitude < 0.01f)
+                if (golfBallRb != null) //&& golfBallRb.linearVelocity.magnitude < 0.1f)
                 {
                     float horizontalInput = Input.GetAxis("Horizontal"); 
                     currentHorizontalAngle += horizontalInput * rotationSpeed * Time.deltaTime;

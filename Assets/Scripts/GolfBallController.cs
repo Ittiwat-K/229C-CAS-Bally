@@ -12,7 +12,7 @@ public class GolfBallController : MonoBehaviour
     private Rigidbody rb;  
     private float golfBallVelocity = 0.1f;  
     //private int hitCount; 
-    //private Vector3 lastHitPosition;  
+    private Vector3 lastHitPosition;  
     //private Collider ballCollider;  
     //private PhysicsMaterial ballPhysicsMaterial;  
 
@@ -24,7 +24,7 @@ public class GolfBallController : MonoBehaviour
         //ballCollider = GetComponent<Collider>();  
         //ballPhysicsMaterial = ballCollider.sharedMaterial;  
         //currentHp = maxHp;  
-        //lastHitPosition = transform.position;  
+        lastHitPosition = transform.position;  
 
         InvokeRepeating("RandomDamping", 0f, dampingInterval);
 
@@ -39,7 +39,7 @@ public class GolfBallController : MonoBehaviour
             {
                 Vector3 hitDirection = Camera.main.transform.forward;  
                 rb.AddForce(hitDirection * hitStrength, ForceMode.Impulse);  
-                //lastHitPosition = transform.position; 
+                lastHitPosition = transform.position; 
                 //hitCount++;
             }
 
@@ -48,7 +48,7 @@ public class GolfBallController : MonoBehaviour
                 Vector3 hitDirection = Camera.main.transform.forward;  
                 Vector3 curvedDirection = hitDirection + Vector3.up * verticalStrength; 
                 rb.AddForce(curvedDirection * hitStrength, ForceMode.Impulse);  
-                //lastHitPosition = transform.position; 
+                lastHitPosition = transform.position; 
                 //hitCount++;
             }
         }
@@ -69,9 +69,9 @@ public class GolfBallController : MonoBehaviour
         }
     }
 
-    /*void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("damage"))
+        /*if (collision.gameObject.CompareTag("damage"))
         {
             currentHp -= 10f;  
 
@@ -88,6 +88,12 @@ public class GolfBallController : MonoBehaviour
         if (currentHp <= 0f)
         {
             currentHp = 0f;
+        }*/
+
+        if (collision.gameObject.CompareTag("damage"))
+        {
+            transform.position = lastHitPosition;
+            rb.linearVelocity = Vector3.zero;
         }
-    }*/
+    }
 }
