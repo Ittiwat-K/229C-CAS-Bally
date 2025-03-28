@@ -9545,7 +9545,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e62b7e76e50a9bf4f8d7c042d1c107a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitStrength: 20
+  hitStrengthMax: 20
+  hitStrengthMin: 10
+  chargeTimeMax: 2
   verticalStrength: 1
   minDamping: 0.5
   maxDamping: 1
@@ -13671,7 +13673,7 @@ MonoBehaviour:
   target: {fileID: 970635797}
   cameraSpeed: 0.1
   offset: {x: 0, y: 2, z: 4}
-  rotationSpeed: 70
+  rotationSpeed: 100
 --- !u!114 &1338293645
 MonoBehaviour:
   m_ObjectHideFlags: 0

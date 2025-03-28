@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class GolfBallController : MonoBehaviour
 {
-    [SerializeField] float hitStrength;  
+    [SerializeField] float hitStrengthMax;
+    [SerializeField] float hitStrengthMin;
+    [SerializeField] float chargeTimeMax;
     [SerializeField] float verticalStrength; 
-    [SerializeField] float minDamping = 0.5f; 
-    [SerializeField] float maxDamping = 2.0f; 
+    [SerializeField] float minDamping; 
+    [SerializeField] float maxDamping; 
     //[SerializeField] float maxHp = 100f;  
     //[SerializeField] float currentHp;  
     [SerializeField] float dampingInterval; 
@@ -17,6 +19,11 @@ public class GolfBallController : MonoBehaviour
     //private PhysicsMaterial ballPhysicsMaterial;  
 
     public AirMeter airMeter;
+
+    private float chargeTimeLeft;  
+    private float chargeTimeRight; 
+    private bool isChargingLeft = false;  
+    private bool isChargingRight = false;
 
     void Start()
     {
@@ -34,22 +41,52 @@ public class GolfBallController : MonoBehaviour
     void Update()
     {
         if (rb.linearVelocity.magnitude < golfBallVelocity)
-        {   
-            if (Input.GetMouseButtonDown(0)) 
+        {
+            if (Input.GetMouseButtonDown(0))
             {
-                Vector3 hitDirection = Camera.main.transform.forward;  
-                rb.AddForce(hitDirection * hitStrength, ForceMode.Impulse);  
-                lastHitPosition = transform.position; 
-                //hitCount++;
+                isChargingLeft = true;
+                chargeTimeLeft = 0f;
             }
 
-            if (Input.GetMouseButtonDown(1)) 
+            if (isChargingLeft && Input.GetMouseButton(0))
             {
-                Vector3 hitDirection = Camera.main.transform.forward;  
-                Vector3 curvedDirection = hitDirection + Vector3.up * verticalStrength; 
-                rb.AddForce(curvedDirection * hitStrength, ForceMode.Impulse);  
-                lastHitPosition = transform.position; 
-                //hitCount++;
+                chargeTimeLeft += Time.deltaTime;
+                chargeTimeLeft = Mathf.Min(chargeTimeLeft, chargeTimeMax);
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                float hitStrength = Mathf.Lerp(hitStrengthMin, hitStrengthMax, chargeTimeLeft / chargeTimeMax);
+                Vector3 hitDirection = Camera.main.transform.forward;
+                rb.AddForce(hitDirection * hitStrength, ForceMode.Impulse);
+                lastHitPosition = transform.position;
+
+                isChargingLeft = false;
+                chargeTimeLeft = 0f;
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                isChargingRight = true;
+                chargeTimeRight = 0f;
+            }
+
+            if (isChargingRight && Input.GetMouseButton(1))
+            {
+                chargeTimeRight += Time.deltaTime;
+                chargeTimeRight = Mathf.Min(chargeTimeRight, chargeTimeMax);
+            }
+
+            if (Input.GetMouseButtonUp(1))
+            {
+                float hitStrength = Mathf.Lerp(hitStrengthMin, hitStrengthMax, chargeTimeRight / chargeTimeMax);
+                Vector3 hitDirection = Camera.main.transform.forward;
+                Vector3 curvedDirection = hitDirection + Vector3.up * verticalStrength;
+                rb.AddForce(curvedDirection * hitStrength, ForceMode.Impulse);
+                lastHitPosition = transform.position;
+
+                isChargingRight = false;
+                chargeTimeRight = 0f;
             }
         }
         UpdateUI();
