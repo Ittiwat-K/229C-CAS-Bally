@@ -12,7 +12,7 @@ public class GolfBallController : MonoBehaviour
     //[SerializeField] float currentHp;  
     [SerializeField] float dampingInterval; 
     private Rigidbody rb;  
-    private float golfBallVelocity = 0.1f;  
+    [SerializeField] float golfBallVelocity = 0.3f;  
     //private int hitCount; 
     private Vector3 lastHitPosition;  
     //private Collider ballCollider;  
@@ -40,8 +40,10 @@ public class GolfBallController : MonoBehaviour
 
     void Update()
     {
+        
         if (rb.linearVelocity.magnitude < golfBallVelocity)
         {
+            rb.linearVelocity = Vector3.zero;
             if (Input.GetMouseButtonDown(0))
             {
                 isChargingLeft = true;
